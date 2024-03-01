@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Running Time Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    
+    .calculator {
+      text-align: center;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 300px;
+    }
+    
+    label, select, input, button {
+      display: block;
+      margin-bottom: 10px;
+    }
+    
+    input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+    
+    select {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    
+    button:hover {
+      background-color: #45a049;
+    }
+    
+    p {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <h2>Running Time Calculator</h2>
+    <label for="distance">Distance:</label>
+    <input type="number" id="distance" placeholder="Distance">
+    <select id="unit">
+      <option value="miles">Miles</option>
+      <option value="kilometers">Kilometers</option>
+    </select>
+    <label for="pace">Pace:</label>
+    <input type="number" id="paceMinutes" placeholder="Minutes">
+    <input type="number" id="paceSeconds" placeholder="Seconds">
+    <button onclick="calculateTime()">Calculate Time</button>
+    <p id="time"></p>
+  </div>
+
+  <script>
+    function calculateTime() {
+      var distance = parseFloat(document.getElementById("distance").value);
+      var paceMinutes = parseFloat(document.getElementById("paceMinutes").value) || 0;
+      var paceSeconds = parseFloat(document.getElementById("paceSeconds").value) || 0;
+      var unit = document.getElementById("unit").value;
+      
+      if (distance <= 0 || (paceMinutes === 0 && paceSeconds === 0)) {
+        document.getElementById("time").innerHTML = "Please enter valid values.";
+        return;
+      }
+
+      var paceInSeconds = (paceMinutes * 60) + paceSeconds;
+
+      var timeInSeconds = paceInSeconds * distance;
+
+      var hours = Math.floor(timeInSeconds / 3600);
+      var minutes = Math.floor((timeInSeconds % 3600) / 60);
+      var seconds = Math.floor(timeInSeconds % 60);
+
+      var timeString = hours + " hrs " + minutes + " min " + seconds + " sec";
+
+      document.getElementById("time").innerHTML = "Time to cover " + distance + " " + unit + ": " + timeString;
+    }
+  </script>
+</body>
+</html>

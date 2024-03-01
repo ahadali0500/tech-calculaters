@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Race Time Predictor</title>
+  <style>
+    body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+      
+      .calculator {
+        text-align: center;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 600px;
+      }
+      
+      label, select, input, button {
+        display: block;
+        margin-bottom: 10px;
+      }
+      
+      button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      
+      button:hover {
+        background-color: #45a049;
+      }
+      
+      p {
+        margin-top: 10px;
+        font-weight: bold;
+      }
+      /* Select dropdown */
+select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
+  
+  /* Number input fields */
+  input[type="number"] {
+    width: calc(50% - 5px);
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
+  
+  /* Predict button */
+  button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #45a049;
+  }
+  
+  /* Result paragraph */
+  p {
+    margin-top: 10px;
+    font-weight: bold;
+  }
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <h2>Race Time Predictor</h2>
+    <label for="recentRace">Recent Race:</label>
+    <select id="recentRace">
+      <option value="marathon">Marathon</option>
+      <option value="halfmarathon">Half Marathon</option>
+      <option value="10mi">10 Miles</option>
+      <option value="10k">10K</option>
+      <option value="5mi">5 Miles</option>
+      <option value="5k">5K</option>
+      <option value="3k">3K</option>
+      <option value="1mi">1 Mile</option>
+      <option value="1500m">1500 Meters</option>
+    </select>
+    <label for="recentRaceTime">Recent Race Time (in hrs min sec):</label>
+    <input type="number" id="hours" placeholder="Hours">
+    <input type="number" id="minutes" placeholder="Minutes">
+    <input type="number" id="seconds" placeholder="Seconds">
+    <label for="goalRace">Goal Race:</label>
+    <select id="goalRace">
+      <option value="marathon">Marathon</option>
+      <option value="halfmarathon">Half Marathon</option>
+      <option value="10mi">10 Miles</option>
+      <option value="10k">10K</option>
+      <option value="5mi">5 Miles</option>
+      <option value="5k">5K</option>
+      <option value="3k">3K</option>
+      <option value="1mi">1 Mile</option>
+      <option value="1500m">1500 Meters</option>
+    </select>
+    <input type="number" id="goalDistance" placeholder="Distance">
+    <select id="goalUnit">
+      <option value="mi">Miles</option>
+      <option value="km">Kilometers</option>
+    </select>
+    <button onclick="predictRaceTime()">Predict Time</button>
+    <p id="result"></p>
+  </div>
+
+  <script>
+    function predictRaceTime() {
+        var recentRace = document.getElementById("recentRace").value;
+        var recentRaceTimeHours = parseFloat(document.getElementById("hours").value) || 0;
+        var recentRaceTimeMinutes = parseFloat(document.getElementById("minutes").value) || 0;
+        var recentRaceTimeSeconds = parseFloat(document.getElementById("seconds").value) || 0;
+        var goalRace = document.getElementById("goalRace").value;
+        var goalDistance = parseFloat(document.getElementById("goalDistance").value) || 0;
+        var goalUnit = document.getElementById("goalUnit").value;
+      
+        var recentRaceTimeTotalMinutes = recentRaceTimeHours * 60 + recentRaceTimeMinutes + recentRaceTimeSeconds / 60;
+      
+        if (recentRaceTimeTotalMinutes === 0 || goalDistance === 0) {
+          document.getElementById("result").innerHTML = "Please enter valid values.";
+          return;
+        }
+      
+        var factor = recentRace === "marathon" ? 42.195 : 
+                     recentRace === "halfmarathon" ? 21.0975 : 
+                     recentRace === "10mi" ? 10 : 
+                     recentRace === "10k" ? 6.21371 : 
+                     recentRace === "5mi" ? 5 : 
+                     recentRace === "5k" ? 3.10686 : 
+                     recentRace === "3k" ? 1.86411 : 
+                     recentRace === "1mi" ? 1 : 
+                     recentRace === "1500m" ? 0.932056 : 0;
+      
+        var goalFactor = goalUnit === "mi" ? 1 :
+                         goalUnit === "km" ? 1.60934 : 0;
+      
+        var predictedTime = recentRaceTimeTotalMinutes * Math.pow((goalDistance * goalFactor / factor), 1.06);
+      
+        var hours = Math.floor(predictedTime / 60);
+        var minutes = Math.floor(predictedTime % 60);
+        var seconds = Math.round((predictedTime % 1) * 60);
+      
+        document.getElementById("result").innerHTML = "Predicted Race Time: " + hours + " hrs " + minutes + " min " + seconds + " sec";
+      }
+      
+  </script>
+</body>
+</html>

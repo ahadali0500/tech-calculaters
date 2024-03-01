@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Running Distance Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    
+    .calculator {
+      text-align: center;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 300px;
+    }
+    
+    label, input, button {
+      display: block;
+      margin-bottom: 10px;
+    }
+    select {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+    input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+    
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    
+    button:hover {
+      background-color: #45a049;
+    }
+    
+    p {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <h2>Running Distance Calculator</h2>
+    <label for="time">Time:</label>
+    <input type="number" id="hours" placeholder="Hours">
+    <input type="number" id="minutes" placeholder="Minutes">
+    <input type="number" id="seconds" placeholder="Seconds">
+    <label for="pace">Pace:</label>
+    <input type="number" id="pace" placeholder="Pace (minutes per mile/km)">
+    <button onclick="calculateDistance()">Calculate Distance</button>
+    <p id="distance"></p>
+  </div>
+
+  <script>
+    function calculateDistance() {
+      var hours = parseFloat(document.getElementById("hours").value) || 0;
+      var minutes = parseFloat(document.getElementById("minutes").value) || 0;
+      var seconds = parseFloat(document.getElementById("seconds").value) || 0;
+      var pace = parseFloat(document.getElementById("pace").value);
+      
+      if (isNaN(pace) || pace <= 0) {
+        document.getElementById("distance").innerHTML = "Please enter a valid pace.";
+        return;
+      }
+
+      var totalTimeInSeconds = (hours * 3600) + (minutes * 60) + seconds;
+
+      if (totalTimeInSeconds <= 0) {
+        document.getElementById("distance").innerHTML = "Please enter a valid time.";
+        return;
+      }
+
+      var distanceMiles = totalTimeInSeconds / pace;
+      var distanceKm = distanceMiles * 1.60934;
+
+      document.getElementById("distance").innerHTML = "Distance: " + distanceMiles.toFixed(2) + " miles or " + distanceKm.toFixed(2) + " kilometers";
+    }
+  </script>
+</body>
+</html>

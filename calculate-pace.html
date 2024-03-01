@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Running Pace Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    
+    .calculator {
+      text-align: center;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 300px;
+    }
+    
+    label, select, input, button {
+      display: block;
+      margin-bottom: 10px;
+    }
+    
+    input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+    
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    
+    button:hover {
+      background-color: #45a049;
+    }
+    
+    p {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    select {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+      }
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <h2>Running Pace Calculator</h2>
+    <label for="distance">Distance:</label>
+    <input type="number" id="distance" placeholder="Distance">
+    <select id="unit">
+      <option value="miles">Miles</option>
+      <option value="kilometers">Kilometers</option>
+    </select>
+    <label for="hours">Time:</label>
+    <input type="number" id="hours" placeholder="Hours">
+    <input type="number" id="minutes" placeholder="Minutes">
+    <input type="number" id="seconds" placeholder="Seconds">
+    <button onclick="calculatePace()">Calculate Pace</button>
+    <p id="pace"></p>
+  </div>
+
+  <script>
+    function calculatePace() {
+      var distance = parseFloat(document.getElementById("distance").value);
+      var hours = parseFloat(document.getElementById("hours").value) || 0;
+      var minutes = parseFloat(document.getElementById("minutes").value) || 0;
+      var seconds = parseFloat(document.getElementById("seconds").value) || 0;
+      var unit = document.getElementById("unit").value;
+      
+      var totalTimeInSeconds = (hours * 3600) + (minutes * 60) + seconds;
+
+      if (distance <= 0 || totalTimeInSeconds <= 0) {
+        document.getElementById("pace").innerHTML = "Please enter valid values.";
+        return;
+      }
+
+      var pace = totalTimeInSeconds / distance;
+
+      var paceMinutes = Math.floor(pace / 60);
+      var paceSeconds = Math.floor(pace % 60);
+
+      var paceString = paceMinutes + " min " + paceSeconds + " sec";
+
+      if (unit === "kilometers") {
+        var pacePerKilometer = pace * 1.60934;
+        var paceMinutesKm = Math.floor(pacePerKilometer / 60);
+        var paceSecondsKm = Math.floor(pacePerKilometer % 60);
+        paceString += " per mile (" + paceMinutesKm + " min " + paceSecondsKm + " sec per kilometer)";
+      } else {
+        paceString += " per mile";
+      }
+
+      document.getElementById("pace").innerHTML = "Pace: " + paceString;
+    }
+  </script>
+</body>
+</html>
